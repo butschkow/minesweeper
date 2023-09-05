@@ -105,13 +105,25 @@ class Sentence():
         """
         Returns the set of all cells in self.cells known to be mines.
         """
-        raise NotImplementedError
+        mines = set()
+        for i in range(self.height):
+            for j in range(self.cells):
+                if self.mark_mine[i][j] == 1:
+                    mines.add([i,j])
+
+        return mines
 
     def known_safes(self):
         """
         Returns the set of all cells in self.cells known to be safe.
         """
-        raise NotImplementedError
+        safes = set()
+        for i in range(self.height):
+            for j in range(self.cells):
+                if self.mark_mine[i][j] == 1:
+                    safes.add([i,j])
+
+        return safes
 
     def mark_mine(self, cell):
         """
@@ -168,6 +180,13 @@ class MinesweeperAI():
             sentence.mark_safe(cell)
 
     def add_knowledge(self, cell, count):
+        
+        per = set()
+
+        #1
+        self.moves_made.add(cell)
+        #2
+        self.safes.add(cell)
         """
         Called when the Minesweeper board tells us, for a given
         safe cell, how many neighboring cells have mines in them.
