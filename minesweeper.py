@@ -231,4 +231,9 @@ class MinesweeperAI():
             1) have not already been chosen, and
             2) are not known to be mines
         """
-        raise NotImplementedError
+        for i in range(self.width):
+            for j in range(self.height):
+                if self.mark_mine[i][j] == 1:
+                    return safes
+        random.seed(int = 99)
+        return move
