@@ -130,14 +130,14 @@ class Sentence():
         Updates internal knowledge representation given the fact that
         a cell is known to be a mine.
         """
-        raise NotImplementedError
+        MinesweeperAI.mark_mine(self, cell)
 
     def mark_safe(self, cell):
         """
         Updates internal knowledge representation given the fact that
         a cell is known to be safe.
         """
-        raise NotImplementedError
+        MinesweeperAI.mark_safe(self, cell)
 
 
 class MinesweeperAI():
@@ -185,8 +185,18 @@ class MinesweeperAI():
 
         #1
         self.moves_made.add(cell)
+        
         #2
         self.safes.add(cell)
+
+        #3
+        for i in range(self.width):
+            for j in range(self.height):
+                if self.mark_mine[i][j] == 1:
+                    per = 1
+        # self.knowledge.append(
+        #     And(cell)
+        # )
         """
         Called when the Minesweeper board tells us, for a given
         safe cell, how many neighboring cells have mines in them.
