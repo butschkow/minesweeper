@@ -106,10 +106,10 @@ class Sentence():
         Returns the set of all cells in self.cells known to be mines.
         """
         mines = set()
-        for i in range(self.height):
-            for j in range(self.cells):
+        for i in range(self.width):
+            for j in range(self.height):
                 if (i,j) in self.mines:
-                    mines.add([i,j])
+                    mines.add((i,j))
 
         return mines
 
@@ -118,10 +118,10 @@ class Sentence():
         Returns the set of all cells in self.cells known to be safe.
         """
         safes = set()
-        for i in range(self.height):
-            for j in range(self.cells):
+        for i in range(self.width):
+            for j in range(self.height):
                 if (i,j) in self.safes:
-                    safes.add([i,j])
+                    safes.add((i,j))
 
         return safes
 
@@ -219,14 +219,21 @@ class MinesweeperAI():
         This function may use the knowledge in self.mines, self.safes
         and self.moves_made, but should not modify any of those values.
         """
-
+        safes = set()
+        saf = Sentence.known_safes(self)
         for i in range(self.width):
             for j in range(self.height):
                     if (i,j) in self.safes:
                         if (i,j) not in self.moves_made:
                             if (i,j) not in self.mines:
-                                return (i,j)
-        
+                                safes.add((i,j))
+                                
+        random_integer = random.randint(0, len(safes))
+        if len(safes) > 0:
+            move = safes.pop()
+        else:
+            move = None
+        return move
         
 
     def make_random_move(self):
