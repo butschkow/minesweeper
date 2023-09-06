@@ -108,7 +108,7 @@ class Sentence():
         mines = set()
         for i in range(self.height):
             for j in range(self.cells):
-                if self.mark_mine[i][j] == 1:
+                if (i,j) in self.mines:
                     mines.add([i,j])
 
         return mines
@@ -120,7 +120,7 @@ class Sentence():
         safes = set()
         for i in range(self.height):
             for j in range(self.cells):
-                if self.mark_mine[i][j] == 1:
+                if (i,j) in self.safes:
                     safes.add([i,j])
 
         return safes
@@ -190,13 +190,10 @@ class MinesweeperAI():
         self.safes.add(cell)
 
         #3
-        for i in range(self.width):
-            for j in range(self.height):
-                if self.mark_mine[i][j] == 1:
-                    per = 1
-        # self.knowledge.append(
-        #     And(cell)
-        # )
+        self.knowledge.append(tuple([cell,count]))
+
+
+
         """
         Called when the Minesweeper board tells us, for a given
         safe cell, how many neighboring cells have mines in them.
@@ -211,7 +208,7 @@ class MinesweeperAI():
             5) add any new sentences to the AI's knowledge base
                if they can be inferred from existing knowledge
         """
-        raise NotImplementedError
+        # raise NotImplementedError
 
     def make_safe_move(self):
         """
@@ -222,7 +219,15 @@ class MinesweeperAI():
         This function may use the knowledge in self.mines, self.safes
         and self.moves_made, but should not modify any of those values.
         """
-        raise NotImplementedError
+
+        for i in range(self.width):
+            for j in range(self.height):
+                    if (i,j) in self.safes:
+                        if (i,j) not in self.moves_made:
+                            if (i,j) not in self.mines:
+                                return (i,j)
+        
+        
 
     def make_random_move(self):
         """
@@ -231,9 +236,14 @@ class MinesweeperAI():
             1) have not already been chosen, and
             2) are not known to be mines
         """
+        safes = set()
+
         for i in range(self.width):
             for j in range(self.height):
-                if self.mark_mine[i][j] == 1:
-                    return safes
-        random.seed(int = 99)
+                if(i,j) not in self.moves_made:
+                    if(i,j) not in self.mines:
+                        safes.add((i,j))
+                        
+        random_integer = random.randint(0, len(safes))
+        move = safes.pop()
         return move
